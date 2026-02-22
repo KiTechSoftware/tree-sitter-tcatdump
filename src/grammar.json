@@ -21,18 +21,6 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "blank_lines"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
               "name": "file_body"
             },
             {
@@ -128,82 +116,6 @@
         "type": "SYMBOL",
         "name": "body_line"
       }
-    },
-    "body_line": {
-      "type": "TOKEN",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "PATTERN",
-            "value": "[^\\n=][^\\n]*\\n"
-          },
-          {
-            "type": "PATTERN",
-            "value": "=([^\\n=][^\\n]*\\n)?"
-          },
-          {
-            "type": "PATTERN",
-            "value": "==([^\\n=][^\\n]*\\n)?"
-          },
-          {
-            "type": "PATTERN",
-            "value": "===([^\\n=][^\\n]*\\n)?"
-          },
-          {
-            "type": "PATTERN",
-            "value": "====([^\\n=][^\\n]*\\n)?"
-          },
-          {
-            "type": "PATTERN",
-            "value": "=====[^\\n \\r][^\\n]*\\n"
-          },
-          {
-            "type": "PATTERN",
-            "value": "===== [^\\nE][^\\n]*\\n"
-          },
-          {
-            "type": "PATTERN",
-            "value": "===== E[^\\nN][^\\n]*\\n"
-          },
-          {
-            "type": "PATTERN",
-            "value": "===== EN[^\\nD][^\\n]*\\n"
-          },
-          {
-            "type": "PATTERN",
-            "value": "===== END[^\\n ][^\\n]*\\n"
-          },
-          {
-            "type": "PATTERN",
-            "value": "===== END [^\\nF][^\\n]*\\n"
-          },
-          {
-            "type": "PATTERN",
-            "value": "===== END F[^\\nI][^\\n]*\\n"
-          },
-          {
-            "type": "PATTERN",
-            "value": "===== END FI[^\\nL][^\\n]*\\n"
-          },
-          {
-            "type": "PATTERN",
-            "value": "===== END FIL[^\\nE][^\\n]*\\n"
-          },
-          {
-            "type": "PATTERN",
-            "value": "===== END FILE[^\\n:][^\\n]*\\n"
-          },
-          {
-            "type": "PATTERN",
-            "value": "===== END FILE:[^\\n ][^\\n]*\\n"
-          },
-          {
-            "type": "PATTERN",
-            "value": "===== END FILE: [^\\n][^\\n]*\\n"
-          }
-        ]
-      }
     }
   },
   "extras": [
@@ -214,7 +126,12 @@
   ],
   "conflicts": [],
   "precedences": [],
-  "externals": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "body_line"
+    }
+  ],
   "inline": [],
   "supertypes": [],
   "reserved": {}
