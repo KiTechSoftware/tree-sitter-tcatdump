@@ -1,0 +1,120 @@
+[
+  {
+    "type": "file_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "blank_lines",
+          "named": true
+        },
+        {
+          "type": "file_body",
+          "named": true
+        },
+        {
+          "type": "file_end",
+          "named": true
+        },
+        {
+          "type": "file_header",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "file_body",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "body_line",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "file_end",
+    "named": true,
+    "fields": {
+      "path": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "file_path",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "file_header",
+    "named": true,
+    "fields": {
+      "path": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "file_path",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "root": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "file_block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "\n",
+    "named": false
+  },
+  {
+    "type": " =====",
+    "named": false
+  },
+  {
+    "type": "===== END FILE: ",
+    "named": false
+  },
+  {
+    "type": "===== FILE: ",
+    "named": false
+  },
+  {
+    "type": "blank_lines",
+    "named": true
+  },
+  {
+    "type": "body_line",
+    "named": true
+  },
+  {
+    "type": "file_path",
+    "named": true
+  }
+]

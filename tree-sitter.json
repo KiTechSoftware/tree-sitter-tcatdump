@@ -1,0 +1,37 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "tcatdump",
+      "camelcase": "Tcatdump",
+      "title": "Tcatdump",
+      "scope": "source.tcatdump",
+      "file-types": ["tcat"],
+      "class-name": "TreeSitterTcatdump"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Tree capture (tcat) dump file grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "KiTech Software",
+        "email": "dev@kitechsoftware.com"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/KiTechSoftware/tree-sitter-tcatdump"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "java": false,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}

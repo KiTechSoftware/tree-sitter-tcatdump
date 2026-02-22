@@ -1,0 +1,221 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
+  "name": "tcatdump",
+  "rules": {
+    "source_file": {
+      "type": "REPEAT",
+      "content": {
+        "type": "SYMBOL",
+        "name": "file_block"
+      }
+    },
+    "file_block": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "file_header"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "blank_lines"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "file_body"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "file_end"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "blank_lines"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "file_header": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "===== FILE: "
+        },
+        {
+          "type": "FIELD",
+          "name": "path",
+          "content": {
+            "type": "SYMBOL",
+            "name": "file_path"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": " ====="
+        },
+        {
+          "type": "STRING",
+          "value": "\n"
+        }
+      ]
+    },
+    "file_end": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "===== END FILE: "
+        },
+        {
+          "type": "FIELD",
+          "name": "path",
+          "content": {
+            "type": "SYMBOL",
+            "name": "file_path"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": " ====="
+        },
+        {
+          "type": "STRING",
+          "value": "\n"
+        }
+      ]
+    },
+    "file_path": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[^\\n=]+"
+      }
+    },
+    "blank_lines": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\n+"
+      }
+    },
+    "file_body": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SYMBOL",
+        "name": "body_line"
+      }
+    },
+    "body_line": {
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "PATTERN",
+            "value": "[^\\n=][^\\n]*\\n"
+          },
+          {
+            "type": "PATTERN",
+            "value": "=([^\\n=][^\\n]*\\n)?"
+          },
+          {
+            "type": "PATTERN",
+            "value": "==([^\\n=][^\\n]*\\n)?"
+          },
+          {
+            "type": "PATTERN",
+            "value": "===([^\\n=][^\\n]*\\n)?"
+          },
+          {
+            "type": "PATTERN",
+            "value": "====([^\\n=][^\\n]*\\n)?"
+          },
+          {
+            "type": "PATTERN",
+            "value": "=====[^\\n \\r][^\\n]*\\n"
+          },
+          {
+            "type": "PATTERN",
+            "value": "===== [^\\nE][^\\n]*\\n"
+          },
+          {
+            "type": "PATTERN",
+            "value": "===== E[^\\nN][^\\n]*\\n"
+          },
+          {
+            "type": "PATTERN",
+            "value": "===== EN[^\\nD][^\\n]*\\n"
+          },
+          {
+            "type": "PATTERN",
+            "value": "===== END[^\\n ][^\\n]*\\n"
+          },
+          {
+            "type": "PATTERN",
+            "value": "===== END [^\\nF][^\\n]*\\n"
+          },
+          {
+            "type": "PATTERN",
+            "value": "===== END F[^\\nI][^\\n]*\\n"
+          },
+          {
+            "type": "PATTERN",
+            "value": "===== END FI[^\\nL][^\\n]*\\n"
+          },
+          {
+            "type": "PATTERN",
+            "value": "===== END FIL[^\\nE][^\\n]*\\n"
+          },
+          {
+            "type": "PATTERN",
+            "value": "===== END FILE[^\\n:][^\\n]*\\n"
+          },
+          {
+            "type": "PATTERN",
+            "value": "===== END FILE:[^\\n ][^\\n]*\\n"
+          },
+          {
+            "type": "PATTERN",
+            "value": "===== END FILE: [^\\n][^\\n]*\\n"
+          }
+        ]
+      }
+    }
+  },
+  "extras": [
+    {
+      "type": "PATTERN",
+      "value": "[ \\t]"
+    }
+  ],
+  "conflicts": [],
+  "precedences": [],
+  "externals": [],
+  "inline": [],
+  "supertypes": [],
+  "reserved": {}
+}
