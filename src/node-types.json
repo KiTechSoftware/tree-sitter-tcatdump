@@ -55,6 +55,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "newline",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -71,6 +81,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "newline",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -90,19 +110,15 @@
     }
   },
   {
-    "type": "\n",
+    "type": "=====",
     "named": false
   },
   {
-    "type": " =====",
+    "type": "===== END FILE:",
     "named": false
   },
   {
-    "type": "===== END FILE: ",
-    "named": false
-  },
-  {
-    "type": "===== FILE: ",
+    "type": "===== FILE:",
     "named": false
   },
   {
@@ -115,6 +131,10 @@
   },
   {
     "type": "file_path",
+    "named": true
+  },
+  {
+    "type": "newline",
     "named": true
   }
 ]

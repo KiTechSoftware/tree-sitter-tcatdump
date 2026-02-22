@@ -22,10 +22,10 @@
 enum ts_symbol_identifiers {
   anon_sym_EQ_EQ_EQ_EQ_EQFILE_COLON = 1,
   anon_sym_EQ_EQ_EQ_EQ_EQ = 2,
-  anon_sym_LF = 3,
-  anon_sym_EQ_EQ_EQ_EQ_EQENDFILE_COLON = 4,
-  sym_file_path = 5,
-  sym_blank_lines = 6,
+  anon_sym_EQ_EQ_EQ_EQ_EQENDFILE_COLON = 3,
+  sym_file_path = 4,
+  sym_blank_lines = 5,
+  sym_newline = 6,
   sym_body_line = 7,
   sym_source_file = 8,
   sym_file_block = 9,
@@ -38,12 +38,12 @@ enum ts_symbol_identifiers {
 
 static const char * const ts_symbol_names[] = {
   [ts_builtin_sym_end] = "end",
-  [anon_sym_EQ_EQ_EQ_EQ_EQFILE_COLON] = "===== FILE: ",
-  [anon_sym_EQ_EQ_EQ_EQ_EQ] = " =====",
-  [anon_sym_LF] = "\n",
-  [anon_sym_EQ_EQ_EQ_EQ_EQENDFILE_COLON] = "===== END FILE: ",
+  [anon_sym_EQ_EQ_EQ_EQ_EQFILE_COLON] = "===== FILE:",
+  [anon_sym_EQ_EQ_EQ_EQ_EQ] = "=====",
+  [anon_sym_EQ_EQ_EQ_EQ_EQENDFILE_COLON] = "===== END FILE:",
   [sym_file_path] = "file_path",
   [sym_blank_lines] = "blank_lines",
+  [sym_newline] = "newline",
   [sym_body_line] = "body_line",
   [sym_source_file] = "source_file",
   [sym_file_block] = "file_block",
@@ -58,10 +58,10 @@ static const TSSymbol ts_symbol_map[] = {
   [ts_builtin_sym_end] = ts_builtin_sym_end,
   [anon_sym_EQ_EQ_EQ_EQ_EQFILE_COLON] = anon_sym_EQ_EQ_EQ_EQ_EQFILE_COLON,
   [anon_sym_EQ_EQ_EQ_EQ_EQ] = anon_sym_EQ_EQ_EQ_EQ_EQ,
-  [anon_sym_LF] = anon_sym_LF,
   [anon_sym_EQ_EQ_EQ_EQ_EQENDFILE_COLON] = anon_sym_EQ_EQ_EQ_EQ_EQENDFILE_COLON,
   [sym_file_path] = sym_file_path,
   [sym_blank_lines] = sym_blank_lines,
+  [sym_newline] = sym_newline,
   [sym_body_line] = sym_body_line,
   [sym_source_file] = sym_source_file,
   [sym_file_block] = sym_file_block,
@@ -85,10 +85,6 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .visible = true,
     .named = false,
   },
-  [anon_sym_LF] = {
-    .visible = true,
-    .named = false,
-  },
   [anon_sym_EQ_EQ_EQ_EQ_EQENDFILE_COLON] = {
     .visible = true,
     .named = false,
@@ -98,6 +94,10 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .named = true,
   },
   [sym_blank_lines] = {
+    .visible = true,
+    .named = true,
+  },
+  [sym_newline] = {
     .visible = true,
     .named = true,
   },
@@ -190,45 +190,47 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
   eof = lexer->eof(lexer);
   switch (state) {
     case 0:
-      if (eof) ADVANCE(29);
-      if (lookahead == '\t') SKIP(0);
+      if (eof) ADVANCE(27);
       if (lookahead == '\n') ADVANCE(32);
-      if (lookahead == ' ') ADVANCE(2);
+      if (lookahead == '\r') ADVANCE(1);
+      if (lookahead == '=') ADVANCE(14);
+      if (lookahead == '\t' ||
+          lookahead == ' ') SKIP(0);
+      if (lookahead != 0 &&
+          (lookahead < '\t' || '\r' < lookahead)) ADVANCE(31);
       END_STATE();
     case 1:
-      if (lookahead == '\t') SKIP(1);
       if (lookahead == '\n') ADVANCE(32);
-      if (lookahead == ' ') ADVANCE(2);
       END_STATE();
     case 2:
-      if (lookahead == '\t') SKIP(1);
-      if (lookahead == '\n') ADVANCE(32);
-      if (lookahead == ' ') ADVANCE(2);
-      if (lookahead == '=') ADVANCE(15);
+      if (lookahead == '\n') ADVANCE(33);
       END_STATE();
     case 3:
-      if (lookahead == ' ') ADVANCE(18);
+      if (lookahead == '\n') ADVANCE(33);
+      if (lookahead == '\r') ADVANCE(2);
+      if (lookahead == '\t' ||
+          lookahead == ' ') SKIP(3);
       END_STATE();
     case 4:
-      if (lookahead == ' ') ADVANCE(21);
+      if (lookahead == ' ') ADVANCE(17);
       END_STATE();
     case 5:
-      if (lookahead == ' ') ADVANCE(30);
+      if (lookahead == ' ') ADVANCE(20);
       END_STATE();
     case 6:
-      if (lookahead == ' ') ADVANCE(33);
+      if (lookahead == ':') ADVANCE(28);
       END_STATE();
     case 7:
-      if (lookahead == ':') ADVANCE(5);
+      if (lookahead == ':') ADVANCE(30);
       END_STATE();
     case 8:
-      if (lookahead == ':') ADVANCE(6);
+      if (lookahead == '=') ADVANCE(29);
       END_STATE();
     case 9:
-      if (lookahead == '=') ADVANCE(31);
+      if (lookahead == '=') ADVANCE(4);
       END_STATE();
     case 10:
-      if (lookahead == '=') ADVANCE(3);
+      if (lookahead == '=') ADVANCE(8);
       END_STATE();
     case 11:
       if (lookahead == '=') ADVANCE(9);
@@ -246,87 +248,69 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       if (lookahead == '=') ADVANCE(13);
       END_STATE();
     case 16:
-      if (lookahead == '=') ADVANCE(14);
+      if (lookahead == 'D') ADVANCE(5);
       END_STATE();
     case 17:
-      if (lookahead == 'D') ADVANCE(4);
+      if (lookahead == 'E') ADVANCE(25);
+      if (lookahead == 'F') ADVANCE(21);
       END_STATE();
     case 18:
-      if (lookahead == 'E') ADVANCE(26);
-      if (lookahead == 'F') ADVANCE(22);
+      if (lookahead == 'E') ADVANCE(6);
       END_STATE();
     case 19:
       if (lookahead == 'E') ADVANCE(7);
       END_STATE();
     case 20:
-      if (lookahead == 'E') ADVANCE(8);
+      if (lookahead == 'F') ADVANCE(22);
       END_STATE();
     case 21:
-      if (lookahead == 'F') ADVANCE(23);
+      if (lookahead == 'I') ADVANCE(23);
       END_STATE();
     case 22:
       if (lookahead == 'I') ADVANCE(24);
       END_STATE();
     case 23:
-      if (lookahead == 'I') ADVANCE(25);
+      if (lookahead == 'L') ADVANCE(18);
       END_STATE();
     case 24:
       if (lookahead == 'L') ADVANCE(19);
       END_STATE();
     case 25:
-      if (lookahead == 'L') ADVANCE(20);
+      if (lookahead == 'N') ADVANCE(16);
       END_STATE();
     case 26:
-      if (lookahead == 'N') ADVANCE(17);
+      if (eof) ADVANCE(27);
+      if (lookahead == '\n') ADVANCE(32);
+      if (lookahead == '\r') ADVANCE(1);
+      if (lookahead == '=') ADVANCE(15);
+      if (lookahead == '\t' ||
+          lookahead == ' ') SKIP(26);
       END_STATE();
     case 27:
-      if (lookahead == '\t' ||
-          lookahead == ' ') ADVANCE(34);
-      if (lookahead != 0 &&
-          lookahead != '\t' &&
-          lookahead != '\n' &&
-          lookahead != '=') ADVANCE(35);
-      END_STATE();
-    case 28:
-      if (eof) ADVANCE(29);
-      if (lookahead == '\n') ADVANCE(36);
-      if (lookahead == '=') ADVANCE(16);
-      if (lookahead == '\t' ||
-          lookahead == ' ') SKIP(28);
-      END_STATE();
-    case 29:
       ACCEPT_TOKEN(ts_builtin_sym_end);
       END_STATE();
-    case 30:
+    case 28:
       ACCEPT_TOKEN(anon_sym_EQ_EQ_EQ_EQ_EQFILE_COLON);
       END_STATE();
-    case 31:
+    case 29:
       ACCEPT_TOKEN(anon_sym_EQ_EQ_EQ_EQ_EQ);
       END_STATE();
-    case 32:
-      ACCEPT_TOKEN(anon_sym_LF);
-      END_STATE();
-    case 33:
+    case 30:
       ACCEPT_TOKEN(anon_sym_EQ_EQ_EQ_EQ_EQENDFILE_COLON);
       END_STATE();
-    case 34:
-      ACCEPT_TOKEN(sym_file_path);
-      if (lookahead == '\t' ||
-          lookahead == ' ') ADVANCE(34);
-      if (lookahead != 0 &&
-          lookahead != '\t' &&
-          lookahead != '\n' &&
-          lookahead != '=') ADVANCE(35);
-      END_STATE();
-    case 35:
+    case 31:
       ACCEPT_TOKEN(sym_file_path);
       if (lookahead != 0 &&
-          lookahead != '\n' &&
-          lookahead != '=') ADVANCE(35);
+          (lookahead < '\t' || '\r' < lookahead) &&
+          lookahead != ' ' &&
+          lookahead != '=') ADVANCE(31);
       END_STATE();
-    case 36:
+    case 32:
       ACCEPT_TOKEN(sym_blank_lines);
-      if (lookahead == '\n') ADVANCE(36);
+      if (lookahead == '\n') ADVANCE(32);
+      END_STATE();
+    case 33:
+      ACCEPT_TOKEN(sym_newline);
       END_STATE();
     default:
       return false;
@@ -335,33 +319,35 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
 
 static const TSLexerMode ts_lex_modes[STATE_COUNT] = {
   [0] = {.lex_state = 0, .external_lex_state = 1},
-  [1] = {.lex_state = 28},
-  [2] = {.lex_state = 28},
-  [3] = {.lex_state = 28, .external_lex_state = 1},
-  [4] = {.lex_state = 28},
-  [5] = {.lex_state = 28},
-  [6] = {.lex_state = 28, .external_lex_state = 1},
-  [7] = {.lex_state = 28},
-  [8] = {.lex_state = 28, .external_lex_state = 1},
-  [9] = {.lex_state = 28},
-  [10] = {.lex_state = 28},
-  [11] = {.lex_state = 28},
-  [12] = {.lex_state = 28, .external_lex_state = 1},
-  [13] = {.lex_state = 28},
-  [14] = {.lex_state = 27},
+  [1] = {.lex_state = 26},
+  [2] = {.lex_state = 26},
+  [3] = {.lex_state = 26, .external_lex_state = 1},
+  [4] = {.lex_state = 26},
+  [5] = {.lex_state = 26},
+  [6] = {.lex_state = 26, .external_lex_state = 1},
+  [7] = {.lex_state = 26},
+  [8] = {.lex_state = 26, .external_lex_state = 1},
+  [9] = {.lex_state = 26},
+  [10] = {.lex_state = 26},
+  [11] = {.lex_state = 26},
+  [12] = {.lex_state = 26, .external_lex_state = 1},
+  [13] = {.lex_state = 26},
+  [14] = {.lex_state = 0},
   [15] = {.lex_state = 0},
-  [16] = {.lex_state = 27},
+  [16] = {.lex_state = 0},
   [17] = {.lex_state = 0},
   [18] = {.lex_state = 0},
-  [19] = {.lex_state = 0},
-  [20] = {.lex_state = 0},
+  [19] = {.lex_state = 3},
+  [20] = {.lex_state = 3},
 };
 
 static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
   [STATE(0)] = {
     [ts_builtin_sym_end] = ACTIONS(1),
     [anon_sym_EQ_EQ_EQ_EQ_EQ] = ACTIONS(1),
-    [anon_sym_LF] = ACTIONS(1),
+    [sym_file_path] = ACTIONS(1),
+    [sym_blank_lines] = ACTIONS(1),
+    [sym_newline] = ACTIONS(1),
     [sym_body_line] = ACTIONS(1),
   },
   [STATE(1)] = {
@@ -471,10 +457,10 @@ static const uint16_t ts_small_parse_table[] = {
       anon_sym_EQ_EQ_EQ_EQ_EQ,
   [128] = 1,
     ACTIONS(51), 1,
-      anon_sym_LF,
+      sym_newline,
   [132] = 1,
     ACTIONS(53), 1,
-      anon_sym_LF,
+      sym_newline,
 };
 
 static const uint32_t ts_small_parse_table_map[] = {

@@ -2,7 +2,6 @@ export default grammar({
   name: "tcatdump",
 
   extras: ($) => [/[ \t]/],
-
   externals: ($) => [$.body_line],
 
   rules: {
@@ -17,15 +16,18 @@ export default grammar({
       ),
 
     file_header: ($) =>
-      seq("===== FILE: ", field("path", $.file_path), " =====", "\n"),
+      seq("===== FILE:", field("path", $.file_path), "=====", $.newline),
 
     file_end: ($) =>
-      seq("===== END FILE: ", field("path", $.file_path), " =====", "\n"),
+      seq("===== END FILE:", field("path", $.file_path), "=====", $.newline),
 
-    file_path: (_) => token(/[^\n=]+/),
+    // Supports paths like ./.zed/settings.json without eating the delimiter
+    file_path: (_) => token(/[^\s=]+/),
 
-    blank_lines: (_) => token(/\n+/),
+    blank_lines: (_) => /\r?\n+/,
+    newline: (_) => /\r?\n/,
 
+    // Body lines are provided by the external scanner and stop at the next marker
     file_body: ($) => repeat1($.body_line),
   },
 });

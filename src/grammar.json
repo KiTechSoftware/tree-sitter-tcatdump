@@ -51,7 +51,7 @@
       "members": [
         {
           "type": "STRING",
-          "value": "===== FILE: "
+          "value": "===== FILE:"
         },
         {
           "type": "FIELD",
@@ -63,11 +63,11 @@
         },
         {
           "type": "STRING",
-          "value": " ====="
+          "value": "====="
         },
         {
-          "type": "STRING",
-          "value": "\n"
+          "type": "SYMBOL",
+          "name": "newline"
         }
       ]
     },
@@ -76,7 +76,7 @@
       "members": [
         {
           "type": "STRING",
-          "value": "===== END FILE: "
+          "value": "===== END FILE:"
         },
         {
           "type": "FIELD",
@@ -88,11 +88,11 @@
         },
         {
           "type": "STRING",
-          "value": " ====="
+          "value": "====="
         },
         {
-          "type": "STRING",
-          "value": "\n"
+          "type": "SYMBOL",
+          "name": "newline"
         }
       ]
     },
@@ -100,15 +100,16 @@
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "[^\\n=]+"
+        "value": "[^\\s=]+"
       }
     },
     "blank_lines": {
-      "type": "TOKEN",
-      "content": {
-        "type": "PATTERN",
-        "value": "\\n+"
-      }
+      "type": "PATTERN",
+      "value": "\\r?\\n+"
+    },
+    "newline": {
+      "type": "PATTERN",
+      "value": "\\r?\\n"
     },
     "file_body": {
       "type": "REPEAT1",
